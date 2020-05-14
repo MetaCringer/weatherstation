@@ -1,0 +1,68 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>WeatherStation</groupId>
+  <artifactId>WeatherStation</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>war</packaging>
+  <build>
+  	<plugins>
+  		<plugin>
+  			<groupId>org.eclipse.jetty</groupId>
+  			<artifactId>jetty-maven-plugin</artifactId>
+ 			<version>9.4.28.v20200408</version>
+ 			<configuration>
+ 				<scanIntervalSeconds>10</scanIntervalSeconds>
+ 				<webApp>
+ 					<contextPath>/weather</contextPath>
+ 				</webApp>
+ 			</configuration>
+		</plugin>
+  	</plugins>
+  </build>
+  <dependencies>
+  
+  	<!-- https://mvnrepository.com/artifact/org.eclipse.jetty/jetty-server -->
+	<dependency>
+	    <groupId>org.eclipse.jetty</groupId>
+	    <artifactId>jetty-server</artifactId>
+	    <version>9.4.28.v20200408</version>
+	</dependency>
+  	<!-- https://mvnrepository.com/artifact/org.eclipse.jetty/jetty-servlet -->
+	<dependency>
+	    <groupId>org.eclipse.jetty</groupId>
+	    <artifactId>jetty-servlet</artifactId>
+	    <version>9.4.28.v20200408</version>
+	</dependency>
+	
+	<!-- https://mvnrepository.com/artifact/org.eclipse.jetty.websocket/websocket-server -->
+	<dependency>
+	    <groupId>org.eclipse.jetty.websocket</groupId>
+	    <artifactId>websocket-server</artifactId>
+	    <version>9.4.28.v20200408</version>
+	</dependency>
+	<!-- https://mvnrepository.com/artifact/javax.websocket/javax.websocket-api -->
+	<dependency>
+	    <groupId>javax.websocket</groupId>
+	    <artifactId>javax.websocket-api</artifactId>
+	    <version>1.1</version>
+	    <scope>provided</scope>
+	</dependency>
+	<!-- https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc -->
+	<dependency>
+	    <groupId>org.xerial</groupId>
+	    <artifactId>sqlite-jdbc</artifactId>
+	    <version>3.31.1</version>
+	</dependency>
+	
+	<!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+	<dependency>
+	    <groupId>com.google.code.gson</groupId>
+	    <artifactId>gson</artifactId>
+	    <version>2.8.5</version>
+	</dependency>
+
+	
+	
+
+  </dependencies>
+</project>
