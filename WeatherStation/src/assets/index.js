@@ -1,16 +1,37 @@
 
-var name,data,title,size
+var name,data,title,size,dir = 0;
+google.charts.load('current', {packages:['corechart','map'], mapsApiKey: 'AIzaSyAecvGHfAJxpDGh8iVSbPE-jjNuFDI_9Qw'});
 function init(Name,Data,Title,Size){
   name=Name
   data=Data
   title=Title
   size=Size
-  google.charts.load('current', {packages:['corechart']});
-      google.charts.setOnLoadCallback(drawchart);
+  
+
+  google.charts.setOnLoadCallback(drawchart);
 }
 
+function drawMap() {
+      var data = google.visualization.arrayToDataTable([
+       ['Lat', 'Long', 'Name'],
+      [49.9967288, 36.233668, 'Метеостанція'],
+      ]);
+
+    var options = {
+      zoomLevel: 12,
+      showTooltip: true,
+      showInfoWindow: true,
+      useMapTypeControl: true
+    };
+
+    var map = new google.visualization.Map(document.getElementById('Map'));
+
+    map.draw(data, options);
+};
+
 function drawchart(){
-  
+  drawDirection = drawdirection;
+  drawDirection(dir)
   console.log(data)
   console.log(title)
   console.log(size)
@@ -30,13 +51,39 @@ function drawchart(){
 
     for(var i = 0; i<size; i++){
       console.log(name[i])
+      if(name.split(",")[i]){
+
+      }
       var chart = new google.visualization.AreaChart(document.getElementById(name.split(",")[i]));
       options.title = title[i] 
       var dataTable=new google.visualization.arrayToDataTable(data[i]) 
       chart.draw(dataTable, options);
+      drawMap()
     }
         
 
+}
+
+var drawDirection = (angle) =>{
+  dir = angle;
+}
+function drawdirection(angle) {
+        var data = google.visualization.arrayToDataTable([
+          ['none', 'none'],
+          [angle + '°',  358],
+          ['Arrow',  2],
+
+        ]);
+
+      var options = {
+        legend: 'none',
+        pieSliceText: 'label',
+        title: 'Напрям флюгера',
+        pieStartAngle: angle+1
+      };
+
+        var chart = new google.visualization.PieChart(document.getElementById('ind_direction'));
+        chart.draw(data, options);
       }
 
 let ws = new WebSocket("ws://meteostation.pp.ua/ws")
@@ -54,6 +101,7 @@ ws.onmessage = (message) => {
     document.getElementById('ind_temperature').innerHTML = packet.data.temperature;
     document.getElementById('ind_humidity').innerHTML = packet.data.humidity;
     document.getElementById('ind_pressure').innerHTML = packet.data.pressure;
+    drawDirection(packet.data.direction);
     var timestamp = new Date(packet.data.timestamp)
     var options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric'};
     document.getElementById('timestamp').innerHTML = timestamp.toLocaleString("ru",options);

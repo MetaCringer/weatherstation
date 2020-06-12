@@ -49,7 +49,7 @@ public class RecieverData implements Runnable{
 			
 			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		
@@ -58,11 +58,11 @@ public class RecieverData implements Runnable{
 	private void save(DatagramPacket packet) {
 		
 		String data= new String(packet.getData());
-		data.substring(0, data.length()-2);
-		data=data.trim();
+		data.substring(0, data.length()-4);// 2 останніх байта приходять не вірні
+		data=data.trim();// Тому я добавив декілька відствупів
 		
 		String[] args = data.split(":");
-		if(args.length<5) {
+		if(args.length<6) {
 			System.out.println("error udp packet: " + data);
 			return;
 		}
@@ -71,11 +71,12 @@ public class RecieverData implements Runnable{
 			System.out.println(args[4]);
 			indication= new Indications(
 			System.currentTimeMillis(),
-			Float.parseFloat(args[0]),
-			Integer.parseInt(args[1]),
+			Math.abs(Float.parseFloat(args[0])),
+			Math.abs(Integer.parseInt(args[1])),
 			Float.parseFloat(args[2]),
-			Float.parseFloat(args[3]),
-			Integer.parseInt(args[4]));
+			Math.abs(Float.parseFloat(args[3])),
+			Math.abs(Integer.parseInt(args[4])),
+			Math.abs(Integer.parseInt(args[5])));
 		}catch(NumberFormatException e) {
 			e.printStackTrace();
 			return;

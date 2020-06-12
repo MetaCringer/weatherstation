@@ -13,17 +13,18 @@ import com.google.gson.JsonParser;
 import com.meta.SQL.SQLDatabase;
 
 public class Indications {
-	private static Indications actual= new Indications(System.currentTimeMillis(), 0, 0, 0, 0, 0);
+	private static Indications actual= new Indications(System.currentTimeMillis(), 0, 0, 0, 0, 0,0);
 	private long timestamp;
-	private int  rainmeter, pressure;
+	private int  rainmeter, pressure, direction;
 	private float anemeter, temperature, humidity;
-	public Indications(long timestamp,float anemeter,int rainmeter,float temperature,float humidity,int pressure) {
+	public Indications(long timestamp,float anemeter,int rainmeter,float temperature,float humidity,int pressure,int direction) {
 		this.timestamp = timestamp;
 		this.anemeter = anemeter;
 		this.rainmeter = rainmeter;
 		this.temperature = temperature;
 		this.humidity = humidity;
 		this.pressure = pressure;
+		this.direction = direction;
 	}
 	public static Indications parse(String json) {
 		JsonParser parser = new JsonParser();
@@ -34,7 +35,8 @@ public class Indications {
 				obj.get("rainmeter").getAsInt(),
 				obj.get("temperature").getAsFloat(),
 				obj.get("humidity").getAsFloat(),
-				obj.get("pressure").getAsInt()
+				obj.get("pressure").getAsInt(),
+				obj.get("direction").getAsInt()
 				);
 	}
 	public static Indications[] getLastIndications(int count) throws SQLException {
@@ -82,12 +84,12 @@ public class Indications {
 		obj.addProperty("temperature", temperature);
 		obj.addProperty("humidity", humidity);
 		obj.addProperty("pressure", pressure);
-		
+		obj.addProperty("direction", direction);
 		return obj;
 	}
 	public static Indications getAverage(List<Indications> arr,long timestamp) {
 		int size=arr.size();
-		Indications result = new Indications(timestamp, 0, 0, 0, 0, 0);
+		Indications result = new Indications(timestamp, 0, 0, 0, 0, 0, 0);
 		if(size < 1) {
 			return result;
 		}
@@ -97,11 +99,14 @@ public class Indications {
 			result.temperature+=ind.temperature;
 			result.humidity+=ind.humidity;
 			result.pressure+=ind.pressure;
+			result.direction+=ind.direction;
 		}
+		
 		result.anemeter/=size;
 		result.temperature/=size;
 		result.humidity/=size;
 		result.pressure/=size;
+		result.direction/=size;
 		return result;
 	}
 	public void updateActualData() {
